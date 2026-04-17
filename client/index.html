@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="src/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Where's Waldo Game | The Odin Project</title>
+  </head>
+  <body id="top">
+    <div id="start-modal">
+      <div>
+        <p class="modal-message">Loading...</p>
+        <button id="start-btn" disabled>Start</button>
+      </div>
+    </div>
+
+    <section id="complete-modal" class="form-body" hidden>
+      <div class="main-layout form-container">
+        <h1>Complete!</h1>
+        <p>Enter your name.</p>
+        <div class="time-display">
+          <h2>TIME</h2>
+          <time datetime="PT2M30S"></time>
+        </div>
+        <form class="form" action="" id="record-form">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            minlength="1"
+            maxlength="25"
+          />
+          <button class="submit-btn">Submit</button>
+        </form>
+        <button id="submit-skip" class="skip-btn">Skip</button>
+      </div>
+    </section>
+
+    <header class="header-layout">
+      <div class="heading-stopwatch-group container">
+        <h1>
+          <a href="/" aria-label="Restart the game">Where's the Kids</a>
+        </h1>
+
+        <div id="stopwatch-container" class="svg-string-group">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-timer-icon lucide-timer"
+          >
+            <line x1="10" x2="14" y1="2" y2="2" />
+            <line x1="12" x2="15" y1="14" y2="11" />
+            <circle cx="12" cy="14" r="8" />
+            <title>Stopwatch</title>
+          </svg>
+          <time id="stopwatch" datetime="PT2M30S">--:--</time>
+        </div>
+
+        <a href="#leaderboard" aria-label="Go to leaderboard">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-trophy-icon lucide-trophy leaderboard-icon"
+          >
+            <path d="M10 14.66v1.626a2 2 0 0 1-.976 1.696A5 5 0 0 0 7 21.978" />
+            <path
+              d="M14 14.66v1.626a2 2 0 0 0 .976 1.696A5 5 0 0 1 17 21.978"
+            />
+            <path d="M18 9h1.5a1 1 0 0 0 0-5H18" />
+            <path d="M4 22h16" />
+            <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" />
+            <path d="M6 9H4.5a1 1 0 0 1 0-5H6" />
+            <title>Check rankings</title>
+          </svg>
+        </a>
+      </div>
+
+      <div class="targets-group max-width">
+        <div class="character-icons" data-character="horse">
+          <img
+            src="/images/horse-kid.webp"
+            title="Hobby Horse"
+            alt="Kid playing with a hobby horse"
+          />
+        </div>
+        <div class="character-icons" data-character="mask">
+          <img
+            src="/images/mask-kid.webp"
+            title="Mask"
+            alt="Kid wearing a mask"
+          />
+        </div>
+        <div class="character-icons" data-character="hat">
+          <img
+            src="/images/hat-kid.webp"
+            title="Hat Throwing"
+            alt="Kid wrapping his arms around his friend's leg, playing hat throwing"
+          />
+        </div>
+        <div class="character-icons" data-character="wall">
+          <img
+            src="/images/wall-kid.webp"
+            title="Against Wall"
+            alt="Kid leaning against the wall"
+          />
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <main class="main-layout fill-viewport max-width">
+        <div class="main-img-container">
+          <img
+            class="main-img"
+            src="/images/Pieter_Bruegel_the_Elder_-_Children’s_Games_-_Google_Art_Project.webp"
+            alt="Crowded scene of children playing games, used as a search puzzle"
+          />
+
+          <!-- #desktop-popup originally hidden -->
+          <div id="desktop-popup" hidden>
+            <ul class="chooser-list">
+              <li>
+                <button data-character="horse">
+                  <div class="chooser-img-frame"></div>
+                  Hobby Horse
+                </button>
+              </li>
+              <li>
+                <button data-character="mask">
+                  <div class="chooser-img-frame"></div>
+                  Mask
+                </button>
+              </li>
+              <li>
+                <button data-character="hat">
+                  <div class="chooser-img-frame"></div>
+                  Hat Throwing
+                </button>
+              </li>
+              <li>
+                <button data-character="wall">
+                  <div class="chooser-img-frame"></div>
+                  Against Wall
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="credit-text">
+          Image:
+          <a
+            href="https://commons.wikimedia.org/wiki/File:Pieter_Bruegel_the_Elder_-_Children%E2%80%99s_Games_-_Google_Art_Project.jpg"
+          >
+            Pieter Brueghel the Elder
+          </a>
+          , Public domain, via Wikimedia Commons
+        </p>
+
+        <!-- mobile chooser hidden on larger screen -->
+        <section class="mobile-chooser fill-viewport">
+          <h2>Identify Target</h2>
+          <ul id="static-chooser" class="mobile-chooser-list">
+            <li>
+              <button data-character="horse">
+                <div class="chooser-img-frame"></div>
+                Hobby Horse
+              </button>
+            </li>
+            <li>
+              <button data-character="mask">
+                <div class="chooser-img-frame"></div>
+                Mask
+              </button>
+            </li>
+            <li>
+              <button data-character="hat">
+                <div class="chooser-img-frame"></div>
+                Hat Throwing
+              </button>
+            </li>
+            <li>
+              <button data-character="wall">
+                <div class="chooser-img-frame"></div>
+                Against Wall
+              </button>
+            </li>
+          </ul>
+          <p class="hit-miss-message"></p>
+        </section>
+      </main>
+
+      <section id="leaderboard" class="fill-viewport max-width">
+        <div class="leaderboard-heading">
+          <h2>Leaderboard</h2>
+          <a
+            href="/#top"
+            class="svg-string-group"
+            aria-label="Go back to top of the page"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-arrow-up-to-line-icon lucide-arrow-up-to-line"
+            >
+              <path d="M5 3h14" />
+              <path d="m18 13-6-6-6 6" />
+              <path d="M12 7v14" /></svg
+            ><span>Back to Top</span></a
+          >
+        </div>
+
+        <table>
+          <thead>
+            <th>RANK</th>
+            <th>NAME</th>
+            <th>TIME</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="rank">-</td>
+              <td class="name">-</td>
+              <td class="time">-</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <footer class="max-width">
+        <p class="credit-text">
+          Icons by
+          <a href="">Lucide</a>
+          | Website by
+          <a href="">Keiko S.</a>
+        </p>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
