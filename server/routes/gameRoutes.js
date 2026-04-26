@@ -11,10 +11,10 @@ const {
 
 game.post('/start', gameController.createGameSession);
 
-game.post('/end', gameController.finishGameSession);
+game.post('/:sessionId/end', gameController.finishGameSession);
 
-game.post('/guess', gameController.processTargetChoice);
+game.post('/:sessionId/guess', gameController.processTargetChoice);
 
-game.patch('/:id/player-name', gameController.addGameSessionPlayerName);
+game.patch('/:sessionId/player-name', gameController.addGameSessionPlayerName);
 
 module.exports = game;

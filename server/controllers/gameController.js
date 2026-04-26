@@ -18,9 +18,9 @@ async function createGameSession(req, res, next) {
 
 async function finishGameSession(req, res, next) {
   try {
-    const { id } = req.body;
+    const { sessionId } = req.params;
 
-    const completedSession = await gameService.finishGameSession(id);
+    const completedSession = await gameService.finishGameSession(sessionId);
 
     return res.status(completedSession.status).json(completedSession.body);
   } catch (err) {
@@ -30,7 +30,8 @@ async function finishGameSession(req, res, next) {
 
 async function processTargetChoice(req, res, next) {
   try {
-    const { sessionId, name, x, y } = req.body;
+    const { sessionId } = req.params;
+    const { name, x, y } = req.body;
 
     const result = await gameService.processTargetChoice({
       sessionId,
@@ -47,11 +48,11 @@ async function processTargetChoice(req, res, next) {
 
 async function addGameSessionPlayerName(req, res, next) {
   try {
-    const { id } = req.params;
+    const { sessionId } = req.params;
     const { playerName } = req.body;
 
     const updatedSession = await gameService.addGameSessionPlayerName(
-      id,
+      sessionId,
       playerName
     );
 

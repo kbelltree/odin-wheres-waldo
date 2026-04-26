@@ -32,15 +32,13 @@ describe('POST /game/start', () => {
   });
 });
 
-describe('POST /game/end', () => {
+describe('POST /game/:sessionId/end', () => {
   test('updates the existing game session and returns id and durationMS', async () => {
     const createdSession = await prisma.gameSession.create({
       data: {},
     });
 
-    const response = await request(app)
-      .post('/game/end')
-      .send({ id: createdSession.id });
+    const response = await request(app).post(`/game/${createdSession.id}/end`);
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
@@ -51,9 +49,8 @@ describe('POST /game/end', () => {
   });
 
   test('returns 404 when the game session does not exist', async () => {
-    const response = await request(app)
-      .post('/game/end')
-      .send({ id: '11111111-1111-1111-1111-111111111111' });
+    const failingId = '11111111-1111-1111-1111-111111111111';
+    const response = await request(app).post(`/game/${failingId}/end`);
 
     expect(response.statusCode).toBe(404);
     expect(response.body).toEqual({
@@ -62,7 +59,7 @@ describe('POST /game/end', () => {
   });
 });
 
-describe('POST /game/guess', () => {
+describe('POST /game/:sessionId/guess', () => {
   test('returns isHit and isGameCompleted for a valid guess', async () => {
     const createdSession = await prisma.gameSession.create({
       data: {},
@@ -77,12 +74,13 @@ describe('POST /game/guess', () => {
         maxY: 0.6,
       },
     });
-    const response = await request(app).post('/game/guess').send({
-      sessionId: createdSession.id,
-      name: 'target1',
-      x: 0.5,
-      y: 0.5,
-    });
+    const response = await request(app)
+      .post(`/game/${createdSession.id}/guess`)
+      .send({
+        name: 'target1',
+        x: 0.5,
+        y: 0.5,
+      });
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
@@ -92,7 +90,7 @@ describe('POST /game/guess', () => {
   });
 });
 
-describe('PATCH /game/:id/player-name', () => {
+describe('PATCH /game/:sessionId/player-name', () => {
   test('updates playerName with submitted name', async () => {
     const createdSession = await prisma.gameSession.create({
       data: {},
@@ -100,7 +98,7 @@ describe('PATCH /game/:id/player-name', () => {
 
     const response = await request(app)
       .patch(`/game/${createdSession.id}/player-name`)
-      .send({ id: createdSession.id, playerName: 'Lorem' });
+      .send({ playerName: 'Lorem' });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.playerName).toBe('Lorem');
