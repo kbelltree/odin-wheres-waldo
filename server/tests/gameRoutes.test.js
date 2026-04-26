@@ -49,7 +49,7 @@ describe('POST /game/:sessionId/end', () => {
   });
 
   test('returns 404 when the game session does not exist', async () => {
-    const failingId = '11111111-1111-1111-1111-111111111111';
+    const failingId = '2efa9110-bb56-411d-814a-0f460354e2ae';
     const response = await request(app).post(`/game/${failingId}/end`);
 
     expect(response.statusCode).toBe(404);
