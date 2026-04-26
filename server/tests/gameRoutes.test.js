@@ -103,4 +103,30 @@ describe('PATCH /game/:sessionId/player-name', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.playerName).toBe('Lorem');
   });
+
+  test('updates playerName with Anonymous when playerName is empty string', async () => {
+    const createdSession = await prisma.gameSession.create({
+      data: {},
+    });
+
+    const response = await request(app)
+      .patch(`/game/${createdSession.id}/player-name`)
+      .send({ playerName: '' });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.playerName).toBe('Anonymous');
+  });
+
+  test('update playerName with Anonymous when undefined', async () => {
+    const createdSession = await prisma.gameSession.create({
+      data: {},
+    });
+
+    const response = await request(app)
+      .patch(`/game/${createdSession.id}/player-name`)
+      .send({});
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.playerName).toBe('Anonymous');
+  });
 });

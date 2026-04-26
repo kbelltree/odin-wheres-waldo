@@ -35,6 +35,7 @@ const validateTargetChoice = [
 
 const validatePlayerName = [
   body('playerName')
+    .optional({ values: 'falsy' })
     .isAlphanumeric()
     .isLength({ min: 1, max: 25 })
     .withMessage('Player Name must be alphanumeric and within 25 characters.'),
