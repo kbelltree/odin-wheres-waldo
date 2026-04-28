@@ -14,6 +14,11 @@ async function listTopTenGameSessions() {
       durationMS: 'asc',
     },
     take: 10,
+    select: {
+      finishedAt: true,
+      playerName: true,
+      durationMS: true,
+    },
   });
 }
 
