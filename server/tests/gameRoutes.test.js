@@ -20,14 +20,14 @@ afterAll(async () => {
 });
 
 describe('POST /game/start', () => {
-  test('creates a new game session, and returns id, startedAt, and foundCharacters', async () => {
+  test('creates a new game session, and returns id, startedAt, and foundTargets', async () => {
     const response = await request(app).post('/game/start');
 
     expect(response.statusCode).toBe(201);
     expect(response.body).toEqual({
       id: expect.any(String),
       startedAt: expect.any(String),
-      foundCharacters: expect.any(Array),
+      foundTargets: expect.any(Array),
     });
   });
 });

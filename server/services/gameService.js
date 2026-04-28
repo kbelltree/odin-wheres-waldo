@@ -8,7 +8,7 @@ const {
 async function createGameSession() {
   return await prisma.gameSession.create({
     data: {},
-    select: { id: true, startedAt: true, foundCharacters: true },
+    select: { id: true, startedAt: true, foundTargets: true },
   });
 }
 
@@ -67,28 +67,28 @@ async function findTargetCoords(name) {
   });
 }
 
-async function findGameSessionFoundCharacters(id) {
+async function findGameSessionFoundTargets(id) {
   const session = await prisma.gameSession.findUnique({
     where: { id },
     select: {
-      foundCharacters: true,
+      foundTargets: true,
     },
   });
 
   if (!session) return null;
-  return session.foundCharacters;
+  return session.foundTargets;
 }
 
-async function updateGameSessionFoundCharacters(id, foundCharactersSet) {
+async function updateGameSessionFoundTargets(id, foundTargetsSet) {
   return await prisma.gameSession.update({
     where: { id },
     data: {
-      // Convert foundCharactersSet back to arr
-      foundCharacters: [...foundCharactersSet],
+      // Convert foundTargetsSet back to arr
+      foundTargets: [...foundTargetsSet],
     },
     select: {
       id: true,
-      foundCharacters: true,
+      foundTargets: true,
     },
   });
 }
@@ -98,19 +98,19 @@ async function countTargets() {
 }
 
 async function processTargetChoice({ sessionId, name, x, y }) {
-  const foundCharacters = await findGameSessionFoundCharacters(sessionId);
+  const foundTargets = await findGameSessionFoundTargets(sessionId);
 
-  if (!foundCharacters) {
+  if (!foundTargets) {
     return {
       status: 404,
       body: { error: 'Game session not found' },
     };
   }
 
-  // Convert foundCharacters arr into Set (mutable);
-  const foundCharactersSet = new Set(foundCharacters);
+  // Convert foundTargets arr into Set (mutable);
+  const foundTargetsSet = new Set(foundTargets);
 
-  if (foundCharactersSet.has(name))
+  if (foundTargetsSet.has(name))
     return {
       status: 409,
       body: { error: `${name} is already found` },
@@ -145,12 +145,12 @@ async function processTargetChoice({ sessionId, name, x, y }) {
     };
   }
 
-  foundCharactersSet.add(targetCoords.name);
+  foundTargetsSet.add(targetCoords.name);
 
-  await updateGameSessionFoundCharacters(sessionId, foundCharactersSet);
+  await updateGameSessionFoundTargets(sessionId, foundTargetsSet);
 
   const targetCount = await countTargets();
-  const isGameCompleted = isGameOver(foundCharactersSet, targetCount);
+  const isGameCompleted = isGameOver(foundTargetsSet, targetCount);
 
   return {
     status: 200,
