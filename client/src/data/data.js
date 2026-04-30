@@ -1,38 +1,29 @@
-const targetCoords = [
-  {
-    character: 'horse',
-    minX: 0.36272727272727273,
-    minY: 0.867334167709637,
-    maxX: 0.41818181818181815,
-    maxY: 0.976846057571965,
-  },
-  {
-    character: 'mask',
-    minX: 0,
-    minY: 0.3660951188986233,
-    maxX: 0.03909090909090909,
-    maxY: 0.42989987484355446,
-  },
-  {
-    character: 'hat',
-    minX: 0.7729090909090909,
-    minY: 0.540811013767209,
-    maxX: 0.8352727272727273,
-    maxY: 0.6093767209011264,
-  },
-  {
-    character: 'wall',
-    minX: 0.9609090909090909,
-    minY: 0.2265456821026283,
-    maxX: 1,
-    maxY: 0.2953566958698373,
-  },
-];
+import { fetchData } from '../utility/api';
 
-export function getTargetCoords() {
-  return [...targetCoords];
+function formatTime(ms) {
+  if (typeof ms !== 'number' || Number.isNaN(ms) || ms < 0) ms = 0;
+
+  const seconds = Math.floor((ms / 1000) % 60);
+  const minutes = Math.floor((ms / (1000 * 60)) % 60);
+
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
-export function getTargetCoordsLength() {
-  return targetCoords.length;
+function normalizeLeaderboardItem(data) {
+  return {
+    name: data.playerName || 'Anonymous',
+    time: formatTime(data.durationMS),
+  };
+}
+
+export async function getLeaderboard() {
+  const { ok, data } = await fetchData('http://localhost:3000/leaderboard');
+
+  if (!ok || !Array.isArray(data)) return { ok, data: [] };
+
+  if (!Array.isArray(data)) {
+    return { ok, data: [] };
+  }
+
+  return { ok, data: data.map(normalizeLeaderboardItem) };
 }
