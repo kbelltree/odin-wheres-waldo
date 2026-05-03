@@ -1,10 +1,4 @@
 const gameService = require('../services/gameService');
-const {
-  calculateDurationMs,
-  isWithinRange,
-  addFoundTarget,
-  isGameOver,
-} = require('../utilities/gameLogic');
 
 async function createGameSession(req, res, next) {
   try {

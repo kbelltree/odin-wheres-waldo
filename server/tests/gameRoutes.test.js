@@ -60,12 +60,15 @@ describe('POST /game/:sessionId/end', () => {
 });
 
 describe('POST /game/:sessionId/guess', () => {
-  test('returns isHit and isGameCompleted for a valid guess', async () => {
-    const createdSession = await prisma.gameSession.create({
+  let session;
+  let target;
+
+  beforeEach(async () => {
+    session = await prisma.gameSession.create({
       data: {},
     });
 
-    await prisma.target.create({
+    target = await prisma.target.create({
       data: {
         name: 'target1',
         minX: 0.4,
@@ -74,18 +77,39 @@ describe('POST /game/:sessionId/guess', () => {
         maxY: 0.6,
       },
     });
-    const response = await request(app)
-      .post(`/game/${createdSession.id}/guess`)
-      .send({
-        name: 'target1',
-        x: 0.5,
-        y: 0.5,
-      });
+  });
+
+  test('returns isHit, isGameCompleted, foundTargets for a valid guess', async () => {
+    const response = await request(app).post(`/game/${session.id}/guess`).send({
+      name: 'target1',
+      x: 0.5,
+      y: 0.5,
+    });
 
     expect(response.statusCode).toBe(200);
     expect(response.body).toEqual({
       isHit: expect.any(Boolean),
       isGameCompleted: expect.any(Boolean),
+      foundTargets: expect.any(Array),
+      targetCoords: expect.any(Object),
+    });
+  });
+
+  test('returns target data if isHit is true', async () => {
+    const response = await request(app).post(`/game/${session.id}/guess`).send({
+      name: 'target1',
+      x: 0.5,
+      y: 0.5,
+    });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.isHit).toBe(true);
+    expect(response.body.targetCoords).toEqual({
+      name: 'target1',
+      minX: 0.4,
+      minY: 0.4,
+      maxX: 0.6,
+      maxY: 0.6,
     });
   });
 });

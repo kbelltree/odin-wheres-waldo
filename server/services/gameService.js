@@ -2,8 +2,9 @@ const { prisma } = require('../lib/prisma');
 const {
   calculateDurationMs,
   isWithinRange,
-  isGameOver,
 } = require('../utilities/gameLogic');
+
+const TARGET_COUNT = 4;
 
 async function createGameSession() {
   return await prisma.gameSession.create({
@@ -107,15 +108,6 @@ async function processTargetChoice({ sessionId, name, x, y }) {
     };
   }
 
-  // Convert foundTargets arr into Set (mutable);
-  const foundTargetsSet = new Set(foundTargets);
-
-  if (foundTargetsSet.has(name))
-    return {
-      status: 409,
-      body: { error: `${name} is already found` },
-    };
-
   const targetCoords = await findTargetCoords(name);
 
   if (!targetCoords) {
@@ -124,6 +116,17 @@ async function processTargetChoice({ sessionId, name, x, y }) {
       body: { error: 'Target not found' },
     };
   }
+
+  const targetName = targetCoords.name;
+
+  // Convert foundTargets arr into Set (mutable);
+  const foundTargetsSet = new Set(foundTargets);
+
+  if (foundTargetsSet.has(targetName))
+    return {
+      status: 409,
+      body: { error: `${name} is already found` },
+    };
 
   const isHit = isWithinRange(
     { x, y },
@@ -141,22 +144,24 @@ async function processTargetChoice({ sessionId, name, x, y }) {
       body: {
         isHit: false,
         isGameCompleted: false,
+        foundTargets: [...foundTargetsSet],
       },
     };
   }
 
-  foundTargetsSet.add(targetCoords.name);
+  foundTargetsSet.add(targetName);
 
   await updateGameSessionFoundTargets(sessionId, foundTargetsSet);
 
-  const targetCount = await countTargets();
-  const isGameCompleted = isGameOver(foundTargetsSet, targetCount);
+  const isGameCompleted = foundTargetsSet.size === TARGET_COUNT;
 
   return {
     status: 200,
     body: {
       isHit: true,
       isGameCompleted,
+      foundTargets: [...foundTargetsSet],
+      targetCoords,
     },
   };
 }

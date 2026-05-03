@@ -1,7 +1,6 @@
 const {
   calculateDurationMs,
   isWithinRange,
-  isGameOver,
 } = require('../utilities/gameLogic');
 
 describe('isWithinRange function', () => {
@@ -18,19 +17,6 @@ describe('isWithinRange function', () => {
 
   test('returns false if the passed coordinate is out of boundary', () => {
     expect(isWithinRange({ x: 0.35, y: 0.978 }, mockCoords)).toBe(false);
-  });
-});
-
-describe('isGameOver function', () => {
-  const mockSetIncomplete = new Set([1, 2, 3]);
-  const mockSetComplete = new Set([1, 2, 3, 4]);
-
-  test('returns false if the passed foundTarget size does not match total target count', () => {
-    expect(isGameOver(mockSetIncomplete, 4)).toBe(false);
-  });
-
-  test('returns true if the passed foundTarget size matches total target count', () => {
-    expect(isGameOver(mockSetComplete, 4)).toBe(true);
   });
 });
 
