@@ -1,8 +1,19 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+const allowedOrigins = ['http://localhost:5173'];
+
+const corsOptions = {
+  origin: allowedOrigins,
+  methods: ['GET', 'POST', 'PATCH'],
+  allowedHeaders: ['Content-Type'],
+};
+
+app.use(cors(corsOptions));
 
 const indexRouter = require('./routes/indexRoutes');
 app.use('/', indexRouter);
