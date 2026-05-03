@@ -160,6 +160,16 @@ footer {
   border-radius: 50px;
 }
 
+#start-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+#start-btn:focus-visible {
+  outline: 3px solid var(--border-color);
+  outline-offset: 2px;
+}
+
 .container {
   min-width: 320px;
   margin: 0 auto;
@@ -298,6 +308,7 @@ footer {
   width: 100%;
   height: 100%;
 
+  color: var(--main-font-color);
   font-size: 14px;
   text-align: left;
   border: 1.5px solid var(--light-border-color);
@@ -450,6 +461,15 @@ footer {
   text-align: center;
   font-size: 0.875rem;
   color: #5b6061;
+}
+
+.form-container .form-message {
+  color: var(--alert-color);
+}
+
+.form .input-rule {
+  margin-top: 0.5em;
+  font-size: 0.75rem;
 }
 
 .time-display {

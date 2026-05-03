@@ -1,16 +1,6 @@
-import { hasFoundCharacter } from '../game/gameState';
+import { hasFoundTarget } from '../game/gameState';
 
 const mainImageFrame = document.querySelector('.main-img-container');
-
-export function markClickPosition({ x, y }) {
-  const mark = document.createElement('div');
-
-  mark.classList.add('target-mark');
-  mark.style.left = x * 100 + '%';
-  mark.style.top = y * 100 + '%';
-
-  mainImageFrame.appendChild(mark);
-}
 
 // Display popup near the clicked coords on the game image
 export function displayPopup({ x, y }) {
@@ -36,13 +26,13 @@ export function markFoundCharacter({ minX, minY, maxX, maxY }) {
   mainImageFrame.appendChild(marker);
 }
 
-export function markFoundCharacterIcons() {
+export function markFoundCharacterIcons(foundTargetsSet) {
   const icons = document.querySelectorAll('.character-icons');
 
   icons.forEach((icon) => {
     const character = icon.dataset.character;
 
-    if (hasFoundCharacter(character)) {
+    if (hasFoundTarget(foundTargetsSet, character)) {
       icon.classList.add('found-icon');
     }
   });

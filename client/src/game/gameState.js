@@ -1,11 +1,8 @@
 let gameInitialState = {
   isImageLoaded: false,
-  // isBackendReady: false
 };
 
 let clickedCoords = null;
-
-const foundCharacters = new Set();
 
 export function setImageLoaded(bool) {
   gameInitialState.isImageLoaded = bool;
@@ -19,14 +16,18 @@ export function getClickedCoords() {
   return { ...clickedCoords };
 }
 
-export function addNewFoundCharacter(characterName) {
-  foundCharacters.add(characterName);
+export function setGameSessionId(sessionId) {
+  sessionStorage.setItem('sessionId', sessionId);
 }
 
-export function hasFoundCharacter(character) {
-  return foundCharacters.has(character);
+export function getGameSessionId() {
+  return sessionStorage.getItem('sessionId');
 }
 
-export function getFoundCharactersCount() {
-  return foundCharacters.size;
+export function removeGameSessionId() {
+  sessionStorage.removeItem('sessionId');
+}
+
+export function hasFoundTarget(foundTargetsSet, name) {
+  return foundTargetsSet.has(name);
 }

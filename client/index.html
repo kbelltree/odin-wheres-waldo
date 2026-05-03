@@ -18,9 +18,10 @@
       <div class="main-layout form-container">
         <h1>Complete!</h1>
         <p>Enter your name.</p>
+        <p class="form-message"></p>
         <div class="time-display">
           <h2>TIME</h2>
-          <time datetime="PT2M30S"></time>
+          <time id="complete-time" datetime="PT2M30S"></time>
         </div>
         <form class="form" action="" id="record-form">
           <label for="name">Name</label>
@@ -30,8 +31,15 @@
             name="name"
             minlength="1"
             maxlength="25"
+            autocapitalize="none"
+            autocorrect="off"
+            spellcheck="false"
           />
-          <button class="submit-btn">Submit</button>
+          <p class="input-rule">
+            Use up to 25 letters or numbers.<br />
+            No spaces or special characters.
+          </p>
+          <button type="submit" class="submit-btn">Submit</button>
         </form>
         <button id="submit-skip" class="skip-btn">Skip</button>
       </div>

@@ -1,48 +1,20 @@
-import { getTargetCoords, getTargetCoordsLength } from '../data/data';
-import {
-  getCoordsByCharacter,
-  checkIfTargetRange,
-} from '../utility/coordinates';
-import { addNewFoundCharacter, getFoundCharactersCount } from './gameState';
+import { getGameSessionId, getClickedCoords } from './gameState';
+import { endGame, guessTarget } from '../data/data';
 
-function evaluateCharacterChoice(
-  characterName,
-  clickedCoords,
-  targetCoordsList
-) {
-  const characterCoords =
-    getCoordsByCharacter(characterName, targetCoordsList) ?? null;
+export async function processCharacterChoice(targetName) {
+  const sessionId = getGameSessionId();
 
-  const isHit = characterCoords
-    ? checkIfTargetRange(clickedCoords, characterCoords)
-    : false;
+  const { x, y } = getClickedCoords();
 
-  return {
-    isHit,
-    characterName,
-    characterCoords,
-  };
+  const result = await guessTarget(sessionId, targetName, x, y);
+
+  return { ...result, x, y };
 }
 
-function checkGameOver() {
-  return getFoundCharactersCount() === getTargetCoordsLength();
-}
+export async function getDuration() {
+  const sessionId = getGameSessionId();
 
-export function processCharacterChoice(characterName, clickedCoords) {
-  let result = evaluateCharacterChoice(
-    characterName,
-    clickedCoords,
-    getTargetCoords()
-  );
+  const result = endGame(sessionId);
 
-  if (result.isHit) {
-    addNewFoundCharacter(characterName);
-  }
-
-  const isGameOver = checkGameOver();
-
-  return {
-    ...result,
-    isGameOver,
-  };
+  return result;
 }

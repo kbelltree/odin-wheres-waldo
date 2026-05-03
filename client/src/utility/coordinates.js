@@ -1,6 +1,3 @@
-// container w: 1100px h: 799px | aspect ratio 1100 / 799 = 1.3767209
-// image w: 2200px h: 1598px | aspect ratio 2200 / 1598 = 1.3767209
-
 // Get normalized x, y coords on the image
 export function getNormalizedCoords(e) {
   const rect = e.currentTarget.getBoundingClientRect();
@@ -32,14 +29,4 @@ export function adjustPopupCoords({ x, y }) {
   } else {
     return { x, y: y - (bottomEdge - 1) };
   }
-}
-
-// Get dataset.character and find the matching character data
-export function getCoordsByCharacter(characterName, data) {
-  return data.find((d) => d.character === characterName);
-}
-
-// Check if clicked coords are within the targetCoords range
-export function checkIfTargetRange({ x, y }, { minX, minY, maxX, maxY }) {
-  return x >= minX && y >= minY && x <= maxX && y <= maxY;
 }
