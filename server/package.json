@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "dev": "node app.js",
+    "dev": "node --watch app.js",
+    "start": "node app.js",
     "test": "NODE_ENV=test jest --setupFiles dotenv/config --detectOpenHandles",
     "lint": "eslint . --fix",
     "format": "prettier --write ."
@@ -13,13 +14,16 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "@prisma/adapter-neon": "^7.8.0",
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7.7.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-validator": "^7.3.2",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "ws": "^8.20.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.29.2",

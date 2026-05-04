@@ -7,6 +7,10 @@ app.use(express.urlencoded({ extended: false }));
 
 const allowedOrigins = ['http://localhost:5173'];
 
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 const corsOptions = {
   origin: allowedOrigins,
   methods: ['GET', 'POST', 'PATCH'],
@@ -14,6 +18,13 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'ok',
+    message: `Where's Waldo API / The Odin Project is running.`,
+  });
+});
 
 const indexRouter = require('./routes/indexRoutes');
 app.use('/', indexRouter);
