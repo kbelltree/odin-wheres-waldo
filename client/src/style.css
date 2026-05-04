@@ -190,11 +190,23 @@ footer {
   padding: 0.25em 0.5em;
   border-radius: 50px;
   place-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+#stopwatch-container svg {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
 }
 
 #stopwatch {
-  flex: 0 0 75px;
+  min-width: 0;
   text-align: center;
+  white-space: nowrap;
 }
 
 .svg-string-group {
@@ -633,6 +645,11 @@ footer {
 
   #stopwatch-container {
     padding: 0.25em 0.75em;
+  }
+
+  #stopwatch-container svg {
+    width: 24px;
+    height: 24px;
   }
 
   #stopwatch {
