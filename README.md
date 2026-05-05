@@ -29,3 +29,15 @@ For the full assignment details, see: [Project: Where's Waldo (A Photo Tagging A
 - Show a popup that allows players to enter their name, with an alternate option for players who do not submit one. 
 - Use the recorded completion times to rank players on the leaderboard.  
 
+## Built With
+
+- HTML
+- CSS
+- Javascript
+- Vite
+- Prisma ORM
+- PostgreSQL
+- Express
+- cors
+- Neon
+- Render
