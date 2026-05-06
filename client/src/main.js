@@ -16,13 +16,17 @@ import {
 } from './ui/modalUI';
 import { submitRecordForm, handleFormSkip } from './ui/recordFormUI';
 import { displayLeaderboard } from './ui/leaderboardUI';
-import { getNewGameSessionId } from './data/data';
+import { getNewGameSessionId, isBackendUp } from './data/data';
 import {
   setImageLoaded,
   getClickedCoords,
   setClickedCoords,
   setGameSessionId,
   removeGameSessionId,
+  isReadyToStart,
+  getGameInitialState,
+  setBackendReady,
+  setStartingGame,
 } from './game/gameState';
 import { getDuration, processCharacterChoice } from './game/gameController';
 
@@ -99,37 +103,111 @@ document.addEventListener('DOMContentLoaded', () => {
     handleChooserClick(e);
   });
 
+  function syncStartModalWithState() {
+    const isReady = isReadyToStart();
+
+    if (isReady) {
+      updateStartModal({
+        messageText: 'Click Start',
+        buttonText: 'Start',
+        isDisabled: false,
+        shouldFocus: true,
+      });
+
+      return;
+    }
+
+    const { isImageLoaded, isBackendReady, isStartingGame } =
+      getGameInitialState();
+
+    if (isStartingGame) {
+      updateStartModal({
+        messageText: 'Starting game...',
+        buttonText: 'Starting...',
+        isDisabled: true,
+      });
+
+      return;
+    }
+
+    if (!isImageLoaded) {
+      updateStartModal({
+        messageText: 'Getting ready...',
+        buttonText: 'Getting ready...',
+        isDisabled: true,
+      });
+
+      return;
+    }
+
+    if (!isBackendReady) {
+      updateStartModal({
+        messageText: 'Waking up the server. May take a moment...',
+        buttonText: 'Getting ready...',
+        isDisabled: true,
+      });
+
+      return;
+    }
+  }
+
+  async function checkBackendReady() {
+    const isReady = await isBackendUp();
+
+    setBackendReady(isReady);
+
+    syncStartModalWithState();
+  }
+
   async function handleGameSetupComplete() {
     setImageLoaded(true);
+    syncStartModalWithState();
 
     // No 'await' needed due to non-critical task
     displayLeaderboard();
 
-    updateStartModal();
     removeGameSessionId();
 
-    const startBtn = document.getElementById('start-btn');
-
-    startBtn.addEventListener('click', async () => {
-      const { ok, sessionId, errorMessage } = await getNewGameSessionId();
-
-      if (!ok) {
-        displayErrorMessage('.modal-message', errorMessage);
-        return;
-      }
-
-      setGameSessionId(sessionId);
-      hideModal('#start-modal');
-      startStopWatch();
-    });
+    await checkBackendReady();
   }
+
+  const startBtn = document.getElementById('start-btn');
+
+  startBtn.addEventListener('click', async () => {
+    if (!isReadyToStart()) return;
+
+    setStartingGame(true);
+    syncStartModalWithState();
+
+    const { ok, sessionId, errorMessage } = await getNewGameSessionId();
+
+    if (!ok) {
+      setStartingGame(false);
+
+      updateStartModal({
+        messageText: errorMessage || 'Please try again.',
+        buttonText: 'Retry',
+        isDisabled: false,
+        shouldFocus: true,
+      });
+
+      return;
+    }
+
+    setGameSessionId(sessionId);
+    hideModal('#start-modal');
+    startStopWatch();
+  });
+
+  syncStartModalWithState();
 
   // Image loading status
   if (image.complete && image.naturalWidth !== 0) {
     handleGameSetupComplete();
   } else {
     // wait until image is loaded
-    image.addEventListener('load', async () => handleGameSetupComplete());
+    image.addEventListener('load', handleGameSetupComplete);
+
     image.addEventListener('error', () =>
       displayErrorMessage('.modal-message')
     );

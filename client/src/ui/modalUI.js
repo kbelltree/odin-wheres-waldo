@@ -1,10 +1,17 @@
-export function updateStartModal() {
+export function updateStartModal({
+  messageText = 'Loading...',
+  buttonText = 'Start',
+  isDisabled = true,
+  shouldFocus = false,
+} = {}) {
   const startBtn = document.getElementById('start-btn');
   const message = document.querySelector('.modal-message');
 
-  startBtn.disabled = false;
-  message.textContent = 'Click Start';
-  startBtn.focus();
+  message.textContent = messageText;
+  startBtn.textContent = buttonText;
+  startBtn.disabled = isDisabled;
+
+  if (shouldFocus && !isDisabled) startBtn.focus();
 }
 
 export function displayModal(selector) {

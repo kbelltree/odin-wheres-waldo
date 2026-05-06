@@ -17,6 +17,14 @@ function normalizeLeaderboardItem(data) {
   };
 }
 
+export async function isBackendUp() {
+  const { ok } = await fetch(`${API_BASE_URL}/health`);
+
+  if (!ok) return false;
+
+  return ok;
+}
+
 export async function getLeaderboard() {
   const { ok, data } = await fetchData(`${API_BASE_URL}/leaderboard`);
 
