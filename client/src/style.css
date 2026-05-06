@@ -150,6 +150,11 @@ footer {
   justify-content: space-evenly;
 }
 
+.modal-message {
+  width: 80%;
+  text-align: center;
+}
+
 #start-btn {
   background-color: #dfe3e4;
   color: var(--secondary-font-color);

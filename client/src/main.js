@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!isBackendReady) {
       updateStartModal({
-        messageText: 'Waking up the server. May take a moment...',
+        messageText: 'Waking up the server. This may take a moment.',
         buttonText: 'Getting ready...',
         isDisabled: true,
       });
