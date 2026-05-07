@@ -365,7 +365,7 @@ footer {
 .mobile-chooser .hit-miss-message {
   font-size: 1rem;
   text-align: center;
-  color: var(--alert-color);
+  color: #505d68;
   font-weight: 600;
   margin-top: 0.5em;
 }

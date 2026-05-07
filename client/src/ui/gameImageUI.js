@@ -54,10 +54,10 @@ export function displayMissMessage({ x, y }) {
   }, 1000);
 }
 
-export function displayMissMsgOnMobileLayout() {
+export function displayHitMissMsgOnMobileLayout(message = '') {
   const msgContainer = document.querySelector('.hit-miss-message');
 
-  msgContainer.textContent = 'Miss!';
+  msgContainer.textContent = message;
 
   setTimeout(() => {
     msgContainer.textContent = '';

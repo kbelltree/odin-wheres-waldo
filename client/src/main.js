@@ -5,7 +5,7 @@ import {
   markFoundCharacter,
   markFoundCharacterIcons,
   displayMissMessage,
-  displayMissMsgOnMobileLayout,
+  displayHitMissMsgOnMobileLayout,
 } from './ui/gameImageUI';
 import {
   updateStartModal,
@@ -74,6 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
       markFoundCharacter(targetCoords);
       markFoundCharacterIcons(foundTargetsSet);
 
+      if (isMobileLayout) displayHitMissMsgOnMobileLayout('Correct!');
+
       if (isGameCompleted) {
         stopStopwatch();
 
@@ -87,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else {
       isMobileLayout
-        ? displayMissMsgOnMobileLayout()
+        ? displayHitMissMsgOnMobileLayout('Miss!')
         : displayMissMessage({ x, y });
     }
   }
